@@ -22,22 +22,23 @@ def predict(
         to_datetime: str  # 2014-07-06 19:18:00
     ):      # 1
     """
-    Make a single course prediction.
-    Assumes `pickup_datetime` is provided as a string by the user in "%Y-%m-%d %H:%M:%S" format
-    Assumes `pickup_datetime` implicitly refers to the "US/Eastern" timezone (as any user in New York City would naturally write)
+    Make a prediction.
+    Assumes `from_datetime` is provided as a string by the user in "%Y-%m-%d %H:%M:%S" format
+    Assumes `from_datetime` implicitly refers to the "US/Eastern" timezone (as any user in New York City would naturally write)
     """
     # Preprocess the features and convert the arguments to a dataframe.
-    X_prep = preprocess_features(pd.DataFrame.from_dict(
-        dict([ ('from_datetime', [pd.Timestamp(pickup_datetime, tz='UTC')]),
-               ('to_datetime', [pd.Timestamp(pickup_datetime, tz='UTC')]) ] )))
-    model = load_model()
-    # model = app.state.model  # Load model only one time. (tbd)
-    # assert model is not None
-    y_pred = model.predict(X_prep)
-    print()
-    print(y_pred)
-    print()
-    return dict(fare= float(y_pred))  # FastAPI does need a dict().
+  # X_prep = preprocess_features(pd.DataFrame.from_dict(
+  #     dict([ ('from_datetime', [pd.Timestamp(pickup_datetime, tz='UTC')]),
+  #            ('to_datetime', [pd.Timestamp(pickup_datetime, tz='UTC')]) ] )))
+  # model = load_model()
+  # # model = app.state.model  # Load model only one time. (tbd)
+  # # assert model is not None
+  # y_pred = model.predict(X_prep)
+  # print()
+  # print(y_pred)
+  # print()
+    # return dict(fare= float(y_pred))  # FastAPI does need a dict().
+    return dict(estimate="Hello, World")  # FastAPI does need a dict().
 
 
 

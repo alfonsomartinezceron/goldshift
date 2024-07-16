@@ -1,7 +1,8 @@
 # Data
 raw_data/
 
-
+# Windows WSL copy information.
+*Zone.Identifier
 
 # Credentials
 .env

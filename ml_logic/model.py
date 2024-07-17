@@ -3,10 +3,15 @@ import time
 import statsmodels.api as sm
 from datetime import datetime, timedelta
 from colorama import Fore, Style
+from goldshift.ml_logic.data import clean_data
 
-def initialize_model(X: np.series) -> Model:
+def initialize_model():
 
-    # Assuming that there is no seasonal order - dUMMY HYPOTHESIS
+    # Reading the Excel file
+    df = pd.read_excel(../raw_data/'gold_price.xlsx')
+    df = clean_data(df)
+
+    # Assuming that there is no seasonal order - Dummy hypothesis
     model = sm.tsa.SARIMAX(X, order =(0,1,0), seasonal_order = (0,0,0,0))
     model = model.fit()
 
@@ -14,8 +19,9 @@ def initialize_model(X: np.series) -> Model:
 
     return model
 
-def prediction_model(model: Model, start: timestamp,
+def prediction_model(start: timestamp,
                      end: timestamp) -> pd.DataFrame:
+    model = initialize_model()
     predictions = model.get_prediction(start = start, end = end, dynamic = False)
     predictions_conf = predictions.conf_init()
 

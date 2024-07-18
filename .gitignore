@@ -3,6 +3,8 @@ raw_data/
 
 # Windows WSL copy information.
 *Zone.Identifier
+*.swp
+*.vim
 
 # Credentials
 .env

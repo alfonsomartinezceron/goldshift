@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 #   from goldshift.ml_logic.preprocessor import preprocess_features
 
 app = FastAPI()
-app.state.model = load_model()
+app.state.model = load_model()  # When is this line of code started?
 
 # app.state.model = load_model()  # Load only once.
 
@@ -23,7 +23,7 @@ app.add_middleware(
 
 # http://127.0.0.1:8000/predict?pickup_datetime=2014-07-06+19:18:00&pickup_longitude=-73.950655&pickup_latitude=40.783282&dropoff_longitude=-73.984365&dropoff_latitude=40.769802&passenger_count=2
 @app.get("/predict")
-def predict( num_days=7):  # number of days starting at 01.07.2024
+def predict(num_days=7):  # number of days starting at 01.07.2024
     """
     Make a prediction for the next number 'num_days' of days.
     """
@@ -31,17 +31,16 @@ def predict( num_days=7):  # number of days starting at 01.07.2024
     # Preprocess the features and convert the arguments to a dataframe.
     # model = load_model()  # Why not loading the model in advance of the request?
     # y_pred = model_test(model)
-    y_pred = model_test(app.state.model)
+    test_input = np.random.random((int(num_days), 10))
+    y_pred = app.state.model.predict(test_input)
+    # y_pred = model_test(app.state.model)
     print(f"y_pred: {y_pred}")
     b = y_pred.flatten().tolist()
     print(f"flattened y_pred: {b}")
-    predictions = {"Hallo": "Welt model_test", "Other": "Venice"}
+    # predictions = {"Hallo": "Welt model_test", "Other": "Venice"}
     # return predictions
     for i, v in enumerate(b):
         result_dict[f"day {i+1}"] = v
-
-    # return [{f"day {i}": i} for i in b]
-
     print(f"result_dict: {result_dict}")
     return result_dict  # Current value of the gold today as dummy.
 

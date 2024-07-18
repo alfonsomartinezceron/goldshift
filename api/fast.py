@@ -28,10 +28,13 @@ def predict(num_days=7):  # number of days starting at 01.07.2024
     Make a prediction for the next number 'num_days' of days.
     """
     result_dict = dict()
-    # Preprocess the features and convert the arguments to a dataframe.
-    # model = load_model()  # Why not loading the model in advance of the request?
-    # y_pred = model_test(model)
-    test_input = np.random.random((int(num_days), 10))
+    # Index check:
+    limit = int(num_days)
+    if limit < 1:
+        limit = 1
+    if limit > 1000:
+        limit = 1000
+    test_input = np.random.random((limit, 10))
     y_pred = app.state.model.predict(test_input)
     # y_pred = model_test(app.state.model)
     print(f"y_pred: {y_pred}")

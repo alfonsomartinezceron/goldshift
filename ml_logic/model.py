@@ -15,7 +15,7 @@ class ConstantLayer(Layer):
 
 
 def initialize_model(input_shape = (10,)) -> Model:
-    value = 5.0  # The constant value you want the model to return
+    value = 2617.89  # The constant value you want the model to return
     constant_layer = ConstantLayer(value)
     # input_shape = (10,)  # Input shape can be anything; it won't affect the output
     inputs = Input(shape=input_shape)

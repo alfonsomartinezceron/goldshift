@@ -8,6 +8,7 @@ from contextlib import asynccontextmanager
 #   from goldshift.ml_logic.preprocessor import preprocess_features
 
 app = FastAPI()
+app.state.model = load_model()
 
 # app.state.model = load_model()  # Load only once.
 
@@ -28,8 +29,9 @@ def predict( num_days=7):  # number of days starting at 01.07.2024
     """
     result_dict = dict()
     # Preprocess the features and convert the arguments to a dataframe.
-    model = load_model()  # Why not loading the model in advance of the request?
-    y_pred = model_test(model)
+    # model = load_model()  # Why not loading the model in advance of the request?
+    # y_pred = model_test(model)
+    y_pred = model_test(app.state.model)
     print(f"y_pred: {y_pred}")
     b = y_pred.flatten().tolist()
     print(f"flattened y_pred: {b}")

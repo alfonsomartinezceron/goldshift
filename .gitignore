@@ -1,5 +1,7 @@
 # Data
 raw_data/
+model/
+*.pkl
 
 # Windows WSL copy information.
 *Zone.Identifier

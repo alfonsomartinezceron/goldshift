@@ -36,15 +36,9 @@ def predict(num_days=7):  # number of days starting at 01.07.2024
         limit = 1000
     test_input = np.random.random((limit, 10))
     y_pred = app.state.model.predict(test_input)
-    # y_pred = model_test(app.state.model)
-    print(f"y_pred: {y_pred}")
     b = y_pred.flatten().tolist()
-    print(f"flattened y_pred: {b}")
-    # predictions = {"Hallo": "Welt model_test", "Other": "Venice"}
-    # return predictions
     for i, v in enumerate(b):
         result_dict[f"day {i+1}"] = v
-    print(f"result_dict: {result_dict}")
     return result_dict  # Current value of the gold today as dummy.
 
 

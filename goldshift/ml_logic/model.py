@@ -1,8 +1,27 @@
 import tensorflow as tf
+import pickle
 from tensorflow.keras.layers import Layer
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input
 import numpy as np
+
+def load_model():
+    model = False
+    try:
+        model = pickle.load(open("../model/my_model.pkl", 'rb'))
+    except Exception:
+        print("Model could not be loaded...")
+    if not model:
+        model = initialize_model()
+        model = compile_model(model)
+        # (tbd): Save the model.
+        try:
+            with open("../model/my_model.pkl", "wb") as file:
+                pickle.dump(model, file)
+            print("Saved new model.")
+        except Exception:
+            pass
+    return model
 
 class ConstantLayer(Layer):
     def __init__(self, value, **kwargs):
@@ -38,7 +57,7 @@ def model_test(model: Model):
     result_dict = {}
     test_input = np.random.random((7, 10))  # Batch of 7 samples, each with 10 features
     predictions = model.predict(test_input)
-    print(predictions)  # Result is 7 times 5 in a matrix.
+    # print(predictions)  # Result is 7 times 5 in a matrix.
     return predictions
 
 

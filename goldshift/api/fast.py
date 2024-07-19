@@ -1,8 +1,8 @@
 import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from ml_logic.model import *
-from main import load_model
+from goldshift.ml_logic.model import *
+# from main import load_model
 from contextlib import asynccontextmanager
 #   from goldshift.ml_logic.registry import load_model
 #   from goldshift.ml_logic.preprocessor import preprocess_features

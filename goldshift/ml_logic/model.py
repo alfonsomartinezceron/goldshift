@@ -8,7 +8,7 @@ import numpy as np
 def load_model():
     model = False
     try:
-        model = pickle.load(open("../model/my_model.pkl", 'rb'))
+        model = pickle.load(open("goldshift/model/my_model.pkl", 'rb'))
     except Exception:
         print("Model could not be loaded...")
     if not model:
@@ -16,9 +16,9 @@ def load_model():
         model = compile_model(model)
         # (tbd): Save the model.
         try:
-            with open("../model/my_model.pkl", "wb") as file:
+            with open("goldshift/model/my_model.pkl", "wb") as file:
                 pickle.dump(model, file)
-            print("Saved new model.")
+            print("Saved new model...")
         except Exception:
             pass
     return model

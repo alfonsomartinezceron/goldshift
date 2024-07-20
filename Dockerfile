@@ -11,12 +11,11 @@ WORKDIR /prod
 # COPY interface interface
 # COPY ml_logic ml_logic
 # COPY params.py params.py
-
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
 COPY goldshift goldshift
 COPY setup.py setup.py
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
 RUN pip install .
 
 # COPY Makefile Makefile

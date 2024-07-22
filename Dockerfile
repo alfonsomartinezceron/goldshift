@@ -14,6 +14,7 @@ WORKDIR /prod
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
+
 COPY goldshift goldshift
 COPY setup.py setup.py
 RUN pip install .

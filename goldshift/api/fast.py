@@ -23,7 +23,7 @@ app.add_middleware(
 
 # http://127.0.0.1:8000/predict?pickup_datetime=2014-07-06+19:18:00&pickup_longitude=-73.950655&pickup_latitude=40.783282&dropoff_longitude=-73.984365&dropoff_latitude=40.769802&passenger_count=2
 @app.get("/predict")
-def predict(num_days=7):  # number of days starting at 01.07.2024
+def predict(num_days=1):  # number of days starting at 01.07.2024
     """
     Make a prediction for the next number 'num_days' of days.
     """
@@ -34,9 +34,22 @@ def predict(num_days=7):  # number of days starting at 01.07.2024
         limit = 1
     if limit > 1000:
         limit = 1000
-    test_input = np.random.random((limit, 10))
-    y_pred = app.state.model.predict(test_input)
-    b = y_pred.flatten().tolist()
+    x_new = tf.expand_dims(tf.convert_to_tensor([2324.4,
+        2324.3,
+        2351.6,
+        2335.1,
+        2328.8,
+        2325.1,
+        2299.7,
+        2323.6,
+        2330.9,
+        2329.1]),-1)
+
+    x_new = tf.expand_dims(x_new,axis=0)
+    y_prediction = app.state.model.predict(x_new)
+    # test_input = np.random.random((limit, 10))
+    # y_pred = app.state.model.predict(test_input)
+    b = y_prediction.flatten().tolist()
     for i, v in enumerate(b):
         result_dict[f"day {i+1}"] = v
     return result_dict  # Current value of the gold today as dummy.

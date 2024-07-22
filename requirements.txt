@@ -17,6 +17,8 @@ google-cloud-storage
 db-dtypes
 pyarrow
 tensorflow
+openpyxl
+typing
 # Trick to install the version of Tensorflow depending on your processor: darwin == Mac, AR>tensorflow-macos==2.10.0; sys_platform == 'darwin' and 'ARM' in platform_version # Mac M-ch>tensorflow==2.10.0; sys_platform == 'darwin' and 'ARM' not in platform_version # Mac Intel >tensorflow==2.10.0; sys_platform != 'darwin' # Windows & Ubuntu Intel chips
 
 # prevent bq 3+ db-dtypes package error when running training from bq

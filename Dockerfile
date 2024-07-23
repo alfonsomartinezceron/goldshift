@@ -22,8 +22,8 @@ RUN pip install .
 # COPY Makefile Makefile
 # RUN make reset_local_files
 
-CMD uvicorn goldshift.api.fast:app --host 0.0.0.0 --port $PORT
-
+# CMD uvicorn goldshift.api.fast:app --reload --host 0.0.0.0
+CMD uvicorn goldshift.api.fast:app --reload --host 0.0.0.0 --port $PORT
 ####### 👇 OPTIMIZED SOLUTION (x86)👇 #######
 
 # # tensorflow base-images are optimized: lighter than python-buster + pip install tensorflow

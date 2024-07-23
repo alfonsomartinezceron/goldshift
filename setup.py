@@ -13,7 +13,7 @@ setup(name='goldshift',
       author_email="contact@lewagon.org",
       #url="https://github.com/lewagon/taxi-fare",
       install_requires=requirements,
-      packages=find_packages(),
+      # packages=find_packages(),
       test_suite="tests",
       # include_package_data: to install data from MANIFEST.in
       include_package_data=True,

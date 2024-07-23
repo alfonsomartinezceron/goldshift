@@ -14,7 +14,7 @@ def create_df_bd():
 
 def df_gold_price():
     df = create_df_bd()
-    df1 = pd.read_excel('../raw_data/gold_price.xlsx')
+    df1 = pd.read_excel('goldshift/raw_data/gold_price.xlsx')
     df1 = df1.rename(columns = {'DATE': 'timestamp','USD': 'gold_price'})
     df1['timestamp'] = pd.to_datetime(df1['timestamp'])
     df = pd.merge(df, df1, on='timestamp', how='left')

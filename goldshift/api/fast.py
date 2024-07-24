@@ -65,7 +65,7 @@ def predict(num_days=1):  # number of days starting at 01.07.2024
     print()
     print(b)
     print()
-    result_dict[f"day01"] = float(b)
+    result_dict[f"day 1"] = float(b)
     return result_dict  # Current value of the gold today as dummy.
 
 

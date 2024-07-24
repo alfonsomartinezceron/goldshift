@@ -21,19 +21,38 @@ def df_gold_price():
     return df
 
 def load_data():
-    # Dataframe with the info from API Alpha (commodities and stock market prices of gold companies)
-    #df1 = df_alpha()
+    # Dataframe with the info from API Alpha commodities
+    df_alpha = pd.read_csv('goldshift/raw_data/alpha.csv')
+    df_alpha = df_alpha.drop('Unnamed: 0',axis=1)
+    df_alpha = df_alpha.drop(columns= ['BRENT','TREASURY_YIELD'])
+    df_alpha = df_alpha.replace('.', np.nan)
+    listcols=['WTI','FEDERAL_FUNDS_RATE','NATURAL_GAS']
+    for col in listcols:
+        df_alpha[col] = pd.to_numeric(df_alpha[col],downcast = 'float')
+
+    # Dataframe with the info from API Alpha gold companies
+    df_stock = pd.read_csv('goldshift/raw_data/stock.csv')
+    df_stock = df_stock.drop('Unnamed: 0',axis=1)
+    df_stock = df_stock[['timestamp','NEM','KGC','HMY','CDE']]
 
     # Dataframe with the info from Kaggle exchange rates
-    #df2 = df_kaggle()
+    df_exchange = pd.read_csv('goldshift/raw_data/kaggle.csv')
+    df_exchange = df_exchange.drop('Unnamed: 0',axis=1)
+    df_exchange = df_exchange[['timestamp','chinese_yuan_to_usd','brazilian_real_to_usd','russian_ruble_to_usd',
+                              'south_african_rand_to_usd','indian_rupee_to_usd']]
 
     # Dataframe with gold prices
-    #df3 = df_gold_price()
+    df_gold = pd.read_csv('goldshift/raw_data/gold_usd.csv')
+    df_gold = df_gold.drop('Unnamed: 0',axis=1)
 
-    #df= pd.merge(df3, df2, on='timestamp', how='left')
-    #df= pd.merge(df,df1, on='timestamp', how='left')
+    #Adding a % column to gold price variation between T and T-1
+    df_gold['gold_old'] = df_gold['gold_price'].shift(1)
+    df_gold['gold_change'] = ((df_gold['gold_price'] - df_gold['gold_old']) / df_gold['gold_old']) * 100
+    df_gold.drop('gold_old', axis=1, inplace=True)
 
-    df = df_gold_price()
+    df = pd.merge(df_gold,df_alpha, on='timestamp', how='left')
+    df = pd.merge(df,df_exchange, on='timestamp', how='left')
+    df = pd.merge(df,df_stock, on='timestamp', how='left')
     df.set_index('timestamp', inplace=True)
 
     #We drop duplicate in case there are
@@ -48,6 +67,11 @@ def load_data():
     print("✅ data loaded and cleaned")
 
     return df
+
+def last_ten_gold(df):
+    last_ten = df['gold_price'].iloc[-10:]
+    y_last_ten = np.array(df.drop(columns= ['gold_price']).iloc[-10:])
+    return(last_ten, y_last_ten)
 
 def train_test_split(df:pd.DataFrame,
                      train_test_ratio =0.9,
@@ -69,6 +93,3 @@ def train_test_split(df:pd.DataFrame,
     print("✅ data splited into train and test")
 
     return (df_train, df_test)
-
-#  To use it in the main
-# train, test = train_test_split(df, TRAIN_TEST_RATIO, INPUT_LENGTH)

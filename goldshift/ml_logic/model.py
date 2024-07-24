@@ -19,9 +19,6 @@ from tensorflow.keras.layers import Normalization
 from goldshift.ml_logic.data import *
 from goldshift.ml_logic.data_sequences import *
 
-
-
-
 def load_model():
     model = False
     try:
@@ -36,16 +33,17 @@ def load_model():
         N_TRAIN = 550 # number_of_sequences_train
         N_TEST = 55  # number_of_sequences_test
 
-        X_train, y_train = get_X_y(df_train, N_TRAIN, 10, 1)
-        print(f"Shape {X_train.shape} X_train: {X_train}")
-        X_test, y_test = get_X_y(df_test, N_TEST, 10, 1)
-        model = initialize_model((10, 1), X_train)
+        X_train, y_train, y_train_price = get_X_y(df_train, N_TRAIN, 10, 1)
+        #print(f"Shape {X_train.shape} X_train: {X_train}")
+        X_test, y_test, y_test_price = get_X_y(df_test, N_TEST, 10, 1)
+        #model = initialize_model((10, 1), X_train)
+        model = initialize_model(X_train)
         model = compile_model(model)
         model, history = train_model(model,
         X_train,
         y_train,
         batch_size=32,
-        patience=10)
+        patience=30)
         # (tbd): Save the model.
         try:
             with open("goldshift/model/gold_model.pkl", "wb") as file:
@@ -55,18 +53,20 @@ def load_model():
             pass
     return model
 
-def initialize_model(input_shape, X_train) -> Model:
+#def initialize_model(input_shape, X_train) -> Model:
+def initialize_model(X_train) -> Model:
     # input_shape --> sequence length (10,1)
     # X --> X_train which coming from 'get_X_y' function
     normalizer = Normalization(axis=-1)
     normalizer.adapt(X_train)
     model = Sequential()
     model.add(normalizer)
-    model.add(LSTM(units=64, activation ='tanh',return_sequences=True))
-    model.add(Dropout(0.2))
-    model.add(LSTM(units=50, return_sequences=False))
-    model.add(Dropout(0.2))
-    model.add(Dense(units=25,activation ='relu'))
+    model.add(LSTM(units=256, activation ='tanh',return_sequences=True))
+    #model.add(Dropout(0.2))
+    model.add(LSTM(units=128, return_sequences=False))
+    #model.add(Dropout(0.2))
+    model.add(Dense(units=64,activation ='relu'))
+    model.add(Dense(units=32,activation ='relu'))
     model.add(Dense(units=1, activation = 'linear'))
 
     print("✅ Model initialized")
@@ -92,7 +92,7 @@ def train_model(
         X_train,
         y_train,
         batch_size=32,
-        patience=10
+        patience=30
     ) -> Tuple[Model, dict]:
     """
     Fit the model and return a tuple (fitted_model, history)
@@ -132,7 +132,6 @@ def model_test(model):
     predictions = model.predict(test_input)
     # print(predictions)  # Result is 7 times 5 in a matrix.
     return predictions
-
 
 if __name__ == "__main__":
     model = initialize_model()

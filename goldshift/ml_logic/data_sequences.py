@@ -13,7 +13,7 @@ def get_Xi_yi(
     df,
     input_length = 10,
     output_length = 1,
-    TARGET = 'gold_price') -> Tuple[pd.DataFrame]:
+    TARGET = 'gold_change') -> Tuple[pd.DataFrame]:
     """given a dataframe (train or test), it returns one sequence (X_i, y_i) as based on the desired
     input_length and output_length with the starting point of the sequence being chosen at random based
 
@@ -29,13 +29,14 @@ def get_Xi_yi(
     first_possible_start = 0
     last_possible_start = len(df) - (input_length + output_length) + 1
     random_start = np.random.randint(first_possible_start, last_possible_start)
+    y_price = df.iloc[random_start+input_length-1:
+                  random_start+input_length+1]['gold_price']
+    df = df.drop(columns = ['gold_price'])
     X_i = df.iloc[random_start:random_start+input_length]
     y_i = df.iloc[random_start+input_length:
                   random_start+input_length+output_length][[TARGET]]
 
-    print("✅ generation of single random sequences for the dataframe")
-
-    return (X_i, y_i)
+    return (X_i, y_i, y_price)
 
 def get_X_y(
     # Generating multiple random sequences
@@ -46,20 +47,14 @@ def get_X_y(
     number_of_sequences,
     input_length = 10,
     output_length = 1):
-    X, y = [], []
+    X, y, y_p = [], [], []
 
     for i in range(number_of_sequences):
-        (Xi, yi) = get_Xi_yi(df, input_length, output_length)
+        (Xi, yi, y_price) = get_Xi_yi(df, input_length, output_length)
         X.append(Xi)
         y.append(yi)
+        y_p.append((y_price))
 
     print("✅ generation of multiple random sequences for the dataframe")
 
-    return np.array(X), np.array(y)
-
-# TO USE IT IN THE MAIN
-
-# N_TRAIN = 550 # number_of_sequences_train
-# N_TEST = 55  # number_of_sequences_test
-# X_train, y_train = get_X_y(train, N_TRAIN, INPUT_LENGTH, OUTPUT_LENGTH)
-# X_test, y_test = get_X_y(test, N_TEST, INPUT_LENGTH, OUTPUT_LENGTH)
+    return np.array(X), np.array(y), np.array(y_p)
